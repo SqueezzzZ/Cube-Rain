@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private GameObject _cubePrefab;
+    [SerializeField] private Cube _cubePrefab;
     [SerializeField] private Transform _spawnCenterPoint;
     [SerializeField] private float _maxSpawnDistance = 15;
     [SerializeField] private float _repeatRate = 1;
@@ -40,20 +40,17 @@ public class Spawner : MonoBehaviour
     private void ActionOnGet(Cube cube)
     {
         cube.SetPosition(GetRandomPointInQuad(_spawnCenterPoint, _maxSpawnDistance));
-        cube.SetDefaultColor();
         cube.SetColorChangedStatus(false);
         cube.SetVelocity(Vector3.zero);
         cube.SetActive(true);
+        cube.SetDefaultColor();
     }
 
     private Cube InstantiateCube()
     {
-        var cubeObject = Instantiate(_cubePrefab);
+        Cube cube = Instantiate(_cubePrefab);
 
-        if(cubeObject.TryGetComponent(out Cube cube))
-        {
-            cube.BarrierTouched += ActionOnBarrierTouched;
-        }
+        cube.BarrierTouched += ActionOnBarrierTouched;
 
         return cube;
     }

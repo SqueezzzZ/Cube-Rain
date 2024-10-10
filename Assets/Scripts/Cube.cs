@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
-    private readonly string _materialPropertyName = "_Color";
-
     private Color _defaultColor;
+    private Renderer _renderer;
+    private Rigidbody _rigitbody;
 
     public bool IsColorChanged { get; private set; } = false;
 
@@ -20,7 +20,7 @@ public class Cube : MonoBehaviour
 
     public void SetColor(Color color)
     {
-        gameObject.GetComponent<Renderer>().material.SetColor(_materialPropertyName, color);
+        _renderer.material.color = color;
     }
 
     public void SetDefaultColor()
@@ -40,12 +40,14 @@ public class Cube : MonoBehaviour
 
     public void SetVelocity(Vector3 velocity)
     {
-        gameObject.GetComponent<Rigidbody>().velocity = velocity;
+        _rigitbody.velocity = velocity;
     }
 
-    private void Start()
+    private void Awake()
     {
-        _defaultColor = gameObject.GetComponent<Renderer>().material.GetColor(_materialPropertyName);
+        _renderer = GetComponent<Renderer>();
+        _rigitbody = GetComponent<Rigidbody>();
+        _defaultColor = _renderer.material.color;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -53,7 +55,6 @@ public class Cube : MonoBehaviour
         if(collision.transform.TryGetComponent(out Barrier barrier) && IsColorChanged == false)
         {
             BarrierTouched?.Invoke(this);
-            Debug.Log("Wall touched");
         }
     }
 }
