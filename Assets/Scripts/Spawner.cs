@@ -21,7 +21,7 @@ public class Spawner : MonoBehaviour
             createFunc: () => InstantiateCube(),
             actionOnGet: (cubeObject) => ActionOnGet(cubeObject),
             actionOnRelease: (cubeObject) => cubeObject.SetActive(false),
-            actionOnDestroy: (cubeObject) => Destroy(cubeObject),
+            actionOnDestroy: (cubeObject) => DestroyCube(cubeObject),
             collectionCheck: true,
             defaultCapacity: _poolCapacity,
             maxSize: _poolMaxSize);
@@ -40,10 +40,7 @@ public class Spawner : MonoBehaviour
     private void ActionOnGet(Cube cube)
     {
         cube.SetPosition(GetRandomPointInQuad(_spawnCenterPoint, _maxSpawnDistance));
-        cube.SetColorChangedStatus(false);
-        cube.SetVelocity(Vector3.zero);
         cube.SetActive(true);
-        cube.SetDefaultColor();
     }
 
     private Cube InstantiateCube()
@@ -55,10 +52,15 @@ public class Spawner : MonoBehaviour
         return cube;
     }
 
+    private void DestroyCube(Cube cube)
+    {
+        cube.BarrierTouched -= ActionOnBarrierTouched;
+        Destroy(cube);
+    }
+
     private void ActionOnBarrierTouched(Cube cube)
     {
         cube.SetColor(Random.ColorHSV());
-        cube.SetColorChangedStatus(true);
         StartCoroutine(DestroyCubeDelayed(cube));
     }
 

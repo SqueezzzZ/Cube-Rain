@@ -8,24 +8,39 @@ public class Cube : MonoBehaviour
     private Color _defaultColor;
     private Renderer _renderer;
     private Rigidbody _rigitbody;
-
-    public bool IsColorChanged { get; private set; } = false;
+    private bool _isBarrierTouched = false;
 
     public event Action<Cube> BarrierTouched;
 
-    public void SetColorChangedStatus(bool isChanged)
+    private void Awake()
     {
-        IsColorChanged = isChanged;
+        _renderer = GetComponent<Renderer>();
+        _rigitbody = GetComponent<Rigidbody>();
+        _defaultColor = _renderer.material.color;
+    }
+
+    private void OnEnable()
+    {
+        _rigitbody.velocity = Vector3.zero;
+        _isBarrierTouched = false;
+        SetColor(_defaultColor);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (_isBarrierTouched == false)
+        {
+            if (collision.transform.TryGetComponent(out Barrier barrier))
+            {
+                BarrierTouched?.Invoke(this);
+                _isBarrierTouched = true;
+            }
+        }
     }
 
     public void SetColor(Color color)
     {
         _renderer.material.color = color;
-    }
-
-    public void SetDefaultColor()
-    {
-        SetColor(_defaultColor);
     }
 
     public void SetActive(bool isActive)
@@ -36,25 +51,5 @@ public class Cube : MonoBehaviour
     public void SetPosition(Vector3 position)
     {
         transform.position = position;
-    }
-
-    public void SetVelocity(Vector3 velocity)
-    {
-        _rigitbody.velocity = velocity;
-    }
-
-    private void Awake()
-    {
-        _renderer = GetComponent<Renderer>();
-        _rigitbody = GetComponent<Rigidbody>();
-        _defaultColor = _renderer.material.color;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(collision.transform.TryGetComponent(out Barrier barrier) && IsColorChanged == false)
-        {
-            BarrierTouched?.Invoke(this);
-        }
     }
 }
