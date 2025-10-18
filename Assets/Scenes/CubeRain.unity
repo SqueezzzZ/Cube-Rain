@@ -895,9 +895,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f0635730ef28c24ebdfd4d31f177916, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cubePrefab: {fileID: 6507026000748798287, guid: b09ed6d1bd9fcfe4f97c6c6916988b62, type: 3}
+  _cubePrefab: {fileID: 2768902798236903734, guid: b09ed6d1bd9fcfe4f97c6c6916988b62, type: 3}
   _spawnCenterPoint: {fileID: 255518926}
-  _maxSpawnDistance: 10
+  _maxSpawnDistance: 15
   _repeatRate: 1
   _minCubeLifeTime: 2
   _maxCubeLifeTime: 5
