@@ -21,7 +21,7 @@ public class Cube : MonoBehaviour
 
     private void OnEnable()
     {
-        _rigitbody.velocity = Vector3.zero;
+        _rigitbody.linearVelocity = Vector3.zero;
         _isBarrierTouched = false;
         SetColor(_defaultColor);
     }
